@@ -1,0 +1,88 @@
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+     var options = {}
+     var elems = document.querySelectorAll('.dropdown-trigger');
+     var instances = M.Dropdown.init(elems, options);
+   });
+
+   $(document).ready(function(){
+     $('.sidenav').sidenav();
+   });
+
+   $('.dropdown-trigger').dropdown();
+ </script>
+
+<nav class="navbar-custom navbar-fixed indigo">
+  <div class="nav-wrapper">
+      <%= link_to (root_path) do %>
+        <%= image_tag "https://netshow.me/images/nsm-logo.svg",  class:"brand-logo", alt:"Logotipo Netshow"  %>
+      <% end %>
+      <a href="javascript:void(0)" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <!-- Dropdown Trigger -->
+        <% if user_signed_in? %>
+        <li><%= link_to "Enviar Vídeos", new_video_path %></li>
+
+        <li>
+          <a class="dropdown-trigger" data-target="dropdown1">
+            <%= current_user.email.truncate(20) %><i class="material-icons right dropdown-trigger">arrow_drop_down</i>
+          </a>
+        </li>
+
+        <% else %>
+          <li><%= link_to "Registrar", new_user_registration_path %></li>
+          <li><%= link_to "Login", new_user_session_path %></li>
+        <% end %>
+      </ul>
+
+  </div>
+</nav>
+
+<ul id="slide-out" class="sidenav center">
+  <!-- Dropdown Trigger -->
+  <% if user_signed_in? %>
+  <li><%= link_to "Enviar Vídeos", new_video_path %></li>
+  <a class="dropdown-trigger center" data-target="dropdown1">
+    <li>
+        <%= current_user.email.truncate(20) %>
+    </li>
+  </a>
+
+  <ul class="options">
+    <li><%= link_to "Meus Vídeos", videos_path %></li>
+    <li><%= link_to "Minha Conta", edit_user_registration_path %></li>
+    <li class="divider"></li>
+    <li><%= link_to "Sair", destroy_user_session_path, method: :delete %></li>
+  </ul>
+
+  <% else %>
+    <li><%= link_to "Registrar", new_user_registration_path %></li>
+    <li><%= link_to "Login", new_user_session_path %></li>
+  <% end %>
+</ul>
+
+<!-- Dropdown Structure -->
+<% if user_signed_in? %>
+<ul id="dropdown1" class="dropdown-content options">
+  <li><%= link_to "Meus Vídeos", videos_path %></li>
+  <li><%= link_to "Minha Conta", edit_user_registration_path %></li>
+  <li class="divider"></li>
+  <li><%= link_to "Sair", destroy_user_session_path, method: :delete %></li>
+</ul>
+<% end %>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+     var options = {}
+     var elems = document.querySelectorAll('.dropdown-trigger');
+     var instances = M.Dropdown.init(elems, options);
+   });
+
+   $(document).ready(function(){
+     $('.sidenav').sidenav();
+   });
+
+   $('.dropdown-trigger').dropdown();
+ </script>

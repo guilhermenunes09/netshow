@@ -1,0 +1,137 @@
+
+
+<% if user_signed_in? %>
+  <div>
+    <%= link_to (videos_path) do %>
+    Voltar
+
+    <span>
+      <i class="material-icons indigo-text left">arrow_back</i>
+    </span>
+
+  <% end %>
+  <span class="grey-text text-lighten-2">
+    |
+  </span>
+  <%= link_to 'Editar', edit_video_path(@video) %>
+
+</div>
+<% end %>
+
+<% if !user_signed_in? %>
+<div>
+  <%= link_to (public_videos_index_path) do %>
+  Voltar
+
+  <span>
+    <i class="material-icons indigo-text left">arrow_back</i>
+  </span>
+
+<% end %>
+</div>
+
+<% end %>
+
+<h1 class="card-title grey-text text-darken-4"><%= @video.name %></h1>
+
+<div class="card">
+
+<div class="card-image waves-effect waves-block waves-light align-center center">
+  <%= videojs_rails sources: { "application/x-mpegURL":  @netshow }, width:"400", id:"netshow", class:"card-video" %>
+</div>
+
+<div class="card-content">
+
+<p class="grey-text text-darken-1">
+  <muted>
+    <% unless @views == 0 %>
+      <%= pluralize(@views, ' visualização', ' visualizações') %>
+    <% else %>
+      Nenhuma visualização
+    <% end %>
+  </muted>
+</p>
+
+</div>
+</div>
+
+<script>
+
+videojs.addLanguage("pt-br", {
+"Play": "Rodar",
+"Play Video": "Rodar vídeo",
+"Pause": "Pausar",
+"Current Time": "Tempo atual",
+"Duration": "Duração",
+"Remaining Time": "Tempo restante",
+"Stream Type": "Tipo de stream",
+"LIVE": "AO VIVO",
+"Loaded": "Carregou",
+"Progress": "Progresso",
+"Fullscreen": "Tela cheia",
+"Non-Fullscreen": "Tela pequena",
+"Mute": "Silêncio",
+"Unmute": "Desligar silêncio",
+"Playback Rate": "Velocidade de Reprodução",
+"Subtitles": "Legendas",
+"subtitles off": "Legendas desligadas",
+"Captions": "Captions",
+"captions off": "Captions desligados",
+"Chapters": "Capítulos",
+"You aborted the media playback": "Você interrompeu o vídeo.",
+"A network error caused the media download to fail part-way.": "Um erro de rede interrompeu o carregamento do vídeo.",
+"The media could not be loaded, either because the server or network failed or because the format is not supported.": "Não foi possível carregar o vídeo devido a problema na conexão ou no servidor, ou porque o formato não é suportado.",
+"The media playback was aborted due to a corruption problem or because the media used features your browser did not support.": "A reprodução deste vídeo foi interrompida por um problema de dados corrompidos, ou necessita de funções que seu navegador não oferece.",
+"No compatible source was found for this media.": "Não foi encontrado fontes compatíveis com este vídeo."
+});
+
+
+var options = {
+language: 'pt-br'
+}
+
+var myvideo = videojs("netshow", options);
+
+console.log("READYYYY");
+
+myvideo.src({
+  src: "<%= @netshow %>",
+  type: "application/x-mpegURL",
+});
+
+myvideo.controls(true);
+
+myvideo.on('ended', function () { // Trigger action when it finishes
+finished();
+});
+
+myvideo.play(); // => Autoplay
+
+console.log("Player");
+console.log(myvideo);
+
+myvideo.on('firstplay', function () { // Trigger action when it plays
+played();
+});
+
+function finished() {
+console.log("external log .. yayy");
+}
+
+function played() {
+console.log("Count as one view");
+var url = '/videos/<%= params[:id] %>/view_plus';
+console.log(url);
+Rails.ajax({
+  type: "POST",
+  url: url,
+  success: function (response) {
+    console.log("Sucesso:" + response);
+  },
+  error: function (error) {
+    console.log("Erro:" + error);
+  }
+})
+
+}
+</script>

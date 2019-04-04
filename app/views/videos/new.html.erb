@@ -1,0 +1,16 @@
+<% if user_signed_in? %>
+  <div>
+    <%= link_to (videos_path) do %>
+    Voltar
+
+    <span>
+      <i class="material-icons indigo-text left">arrow_back</i>
+    </span>
+
+  <% end %>
+</div>
+<% end %>
+
+<h1>Novo Vídeo</h1>
+
+<%= render 'form', video: @video %>

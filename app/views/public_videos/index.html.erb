@@ -1,0 +1,38 @@
+<div class="container">
+  <div class="row">
+
+    <% if @videos.length == 0 %>
+      <div class="center">
+        Nenhum vídeo para mostrar aqui.<br>
+        <%= link_to "Clique aqui", new_video_path %>
+        para enviar um vídeo.
+      </div>
+    <% end %>
+    <% @videos.each do |video| %>
+
+      <div class="col s12 m6 l6">
+
+        <%= link_to(video) do %>
+        <div class="card">
+          <div class="card-image">
+            <div class="waves-effect waves-block waves-light">
+              <%= image_tag "play_logo.png", class:"video_image", alt: "Imagem de Vídeo" %>
+            </div>
+
+            <div class="btn-floating halfway-fab waves-effect waves-light indigo">
+              <i class="material-icons">play_arrow</i>
+            </div>
+
+          </div>
+          <div class="card-action">
+            <span><%= video.name %></span>
+          </div>
+        </div>
+      <% end %>
+
+    </div>
+  <% end %>
+
+  <Modal video={this.state.selected_video}/>
+</div>
+</div>
